@@ -23,7 +23,9 @@ namespace Day3
 
         private static (int, int) getCounts(List<string> values, int index)
         {
-            return (values.Where(s => s[index] == '0').Count(), values.Where(s => s[index] == '1').Count());
+            int zero_count = values.Where(s => s[index] == '0').Count();
+            int one_count = values.Count - zero_count;
+            return (zero_count, one_count);
         }
 
         public static int part1(string file_name)
@@ -54,11 +56,6 @@ namespace Day3
             return (int)(gamma_rate * epsilon_rate);
         }
 
-        private static List<string> removeNonMatch(List<string> possibilities, int index, char required)
-        {
-            return new List<string>(possibilities.Where(s => s[index] == required));
-        }
-
         private static char getFilterChar(List<string> input, string type, int index)
         {
             char filter_char = '0';
@@ -81,7 +78,8 @@ namespace Day3
             List<string> possibilities = new List<string>(input);
             for (int i = 0; i < input[0].Length && possibilities.Count > 1; ++i)
             {
-                possibilities = removeNonMatch(possibilities, i, getFilterChar(possibilities, type, i));
+                char filter_char = getFilterChar(possibilities, type, i);
+                possibilities = possibilities.Where(s => s[i] == filter_char).ToList();
             }
             return Convert.ToInt32(possibilities[0], 2);
         }
@@ -101,7 +99,10 @@ namespace Day3
 
         static void Main(string[] args)
         {
+            part1("sample_input.txt");
+            part1("input.txt");
             part2("sample_input.txt");
+            part2("input.txt");
         }
     }
 }
