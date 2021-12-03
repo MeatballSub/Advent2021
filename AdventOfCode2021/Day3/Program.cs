@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 namespace Day3
 {
@@ -22,25 +23,11 @@ namespace Day3
 
         private static (int, int) getCounts(List<string> values, int index)
         {
-            int zero_count = 0;
-            int one_count = 0;
-            foreach (string s in values)
-            {
-                if (s[index] == '0')
-                {
-                    ++zero_count;
-                }
-                else
-                {
-                    ++one_count;
-                }
-            }
-            return (zero_count, one_count);
+            return (values.Where(s => s[index] == '0').Count(), values.Where(s => s[index] == '1').Count());
         }
 
         public static int part1(string file_name)
         {
-            int result = 0;
             List<string> input = readInput(file_name);
             int length = input[0].Length;
 
@@ -67,56 +54,44 @@ namespace Day3
             return (int)(gamma_rate * epsilon_rate);
         }
 
-        private static List<string> removeNonMatch(List<string> possibilities, int i, char required)
+        private static List<string> removeNonMatch(List<string> possibilities, int index, char required)
         {
-            List<string> filtered = new List<string>(possibilities);
-            foreach (string s in possibilities)
+            return new List<string>(possibilities.Where(s => s[index] == required));
+        }
+
+        private static char getFilterChar(List<string> input, string type, int index)
+        {
+            char filter_char = '0';
+
+            (int zero_count, int one_count) = getCounts(input, index);
+            if (zero_count > one_count)
             {
-                if (s[i] != required)
-                {
-                    filtered.Remove(s);
-                }
+                filter_char = (type == "oxygen") ? '0' : '1';
             }
-            return filtered;
+            else
+            {
+                filter_char = (type == "oxygen") ? '1' : '0';
+            }
+
+            return filter_char;
         }
 
         private static int getRating(List<string> input, string type)
         {
             List<string> possibilities = new List<string>(input);
-            for (int i = 0; i < input[0].Length; ++i)
+            for (int i = 0; i < input[0].Length && possibilities.Count > 1; ++i)
             {
-                if (possibilities.Count > 1)
-                {
-                    (int zero_count, int one_count) = getCounts(possibilities, i);
-                    if ((one_count > zero_count) || (zero_count == one_count))
-                    {
-                        possibilities = removeNonMatch(possibilities, i, (type == "oxygen") ? '1' : '0');
-                    }
-                    else // (zero_count > one_count)
-                    {
-                        possibilities = removeNonMatch(possibilities, i, (type == "oxygen") ? '0' : '1');
-                    }
-                }
+                possibilities = removeNonMatch(possibilities, i, getFilterChar(possibilities, type, i));
             }
             return Convert.ToInt32(possibilities[0], 2);
-        }
-
-        private static int getOxygen(List<string> input)
-        {
-            return getRating(input, "oxygen");
-        }
-
-        private static int getCO2(List<string> input)
-        {
-            return getRating(input, "co2");
         }
 
         public static int part2(string file_name)
         {
             int result = 0;
             List<string> input = readInput(file_name);
-            int oxygen_rating = getOxygen(input);
-            int co2_rating = getCO2(input);
+            int oxygen_rating = getRating(input, "oxygen");
+            int co2_rating = getRating(input, "co2");
 
             Console.WriteLine("Oxygen: " + oxygen_rating);
             Console.WriteLine("CO2: " + co2_rating);
