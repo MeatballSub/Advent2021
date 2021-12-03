@@ -33,8 +33,8 @@ namespace Day3
             List<string> input = readInput(file_name);
             int length = input[0].Length;
 
-            uint gamma_rate = 0;
-            uint epsilon_rate = 0;
+            int gamma_rate = 0;
+            int epsilon_rate = 0;
             for(int i = 0; i < length; ++i)
             {                
                 gamma_rate <<= 1;
@@ -53,7 +53,7 @@ namespace Day3
             Console.WriteLine("Gamma: " + gamma_rate);
             Console.WriteLine("Epsilon: " + epsilon_rate);
 
-            return (int)(gamma_rate * epsilon_rate);
+            return (gamma_rate * epsilon_rate);
         }
 
         private static char getFilterChar(List<string> input, string type, int index)
