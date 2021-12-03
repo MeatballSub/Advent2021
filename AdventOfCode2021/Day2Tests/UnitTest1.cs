@@ -37,6 +37,6 @@ namespace Day2Tests
 
         public static IEnumerable<object[]> Day02Part2sample => TestSetup("sample_input.txt", 900);
 
-        public static IEnumerable<object[]> Day02Part2 => TestSetup("input.txt", 0);
+        public static IEnumerable<object[]> Day02Part2 => TestSetup("input.txt", 1864715580);
     }
 }
