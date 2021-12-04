@@ -8,14 +8,15 @@ namespace Day4
 {
     public class Board
     {
+        const int BOARD_SIZE = 5;
         public int [,] spaces;
         public bool [,] marked;
         public bool won;
 
         public Board()
         {
-            spaces = new int[5, 5];
-            marked = new bool[5, 5];
+            spaces = new int[BOARD_SIZE, BOARD_SIZE];
+            marked = new bool[BOARD_SIZE, BOARD_SIZE];
             won = false;
         }
 
@@ -23,9 +24,9 @@ namespace Day4
         {
             bool added_mark = false;
 
-            for (int row = 0; row < 5; ++row)
+            for (int row = 0; row < BOARD_SIZE; ++row)
             {
-                for (int col = 0; col < 5; ++col)
+                for (int col = 0; col < BOARD_SIZE; ++col)
                 {
                     if (spaces[row, col] == value)
                     {
@@ -40,18 +41,18 @@ namespace Day4
 
         private bool isWinner()
         {
-            int[] row_counts = new int[5];
-            int[] col_counts = new int[5];
+            int[] row_counts = new int[BOARD_SIZE];
+            int[] col_counts = new int[BOARD_SIZE];
 
-            for (int row = 0; !won && row < 5; ++row)
+            for (int row = 0; !won && row < BOARD_SIZE; ++row)
             {
-                for (int col = 0; !won && col < 5; ++col)
+                for (int col = 0; !won && col < BOARD_SIZE; ++col)
                 {
                     if(marked[row,col])
                     {
                         ++row_counts[row];
                         ++col_counts[col];
-                        if((row_counts[row] > 4) || (col_counts[col] > 4))
+                        if((row_counts[row] >= BOARD_SIZE) || (col_counts[col] >= BOARD_SIZE))
                         {
                             won = true;
                         }
@@ -70,7 +71,7 @@ namespace Day4
         public Board(TextReader reader):this()
         {
             string line;
-            for(int row=0;row<5; ++row)
+            for(int row=0;row< BOARD_SIZE; ++row)
             {
                 line = reader.ReadLine();
                 var row_numbers = line.Split(' ', StringSplitOptions.RemoveEmptyEntries);
@@ -88,9 +89,9 @@ namespace Day4
         {
             int sum = 0;
 
-            for(int row = 0; row < 5; ++row)
+            for(int row = 0; row < BOARD_SIZE; ++row)
             {
-                for(int col = 0; col < 5; ++col)
+                for(int col = 0; col < BOARD_SIZE; ++col)
                 {
                     if(!marked[row,col])
                     {
