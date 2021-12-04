@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 
 namespace Day4
@@ -9,11 +10,13 @@ namespace Day4
     {
         public int [,] spaces;
         public bool [,] marked;
+        public bool won;
 
         public Board()
         {
             spaces = new int[5, 5];
             marked = new bool[5, 5];
+            won = false;
         }
 
         private bool addMark(int value)
@@ -37,14 +40,12 @@ namespace Day4
 
         private bool isWinner()
         {
-            bool winner = false;
-
             int[] row_counts = new int[5];
             int[] col_counts = new int[5];
 
-            for (int row = 0; !winner && row < 5; ++row)
+            for (int row = 0; !won && row < 5; ++row)
             {
-                for (int col = 0; !winner && col < 5; ++col)
+                for (int col = 0; !won && col < 5; ++col)
                 {
                     if(marked[row,col])
                     {
@@ -52,13 +53,13 @@ namespace Day4
                         ++col_counts[col];
                         if((row_counts[row] > 4) || (col_counts[col] > 4))
                         {
-                            winner = true;
+                            won = true;
                         }
                     }
                 }
             }
 
-            return winner;
+            return won;
         }
 
         public bool mark(int value)
@@ -130,63 +131,47 @@ namespace Day4
         {
             (List<int> draws, List<Board> boards) = readInput(file_name);
 
-            Board winner = new Board();
-            int final_draw = -1;
-            foreach(int draw in draws)
+            Board winner = null;
+
+            int draw_index = 0;
+            for (; (winner == null) && (draw_index < draws.Count); ++draw_index)
             {
-                foreach(Board board in boards)
+                foreach (Board board in boards)
                 {
-                    if(board.mark(draw))
+                    if(board.mark(draws[draw_index]))
                     {
-                        final_draw = draw;
                         winner = board;
                         break;
                     }
                 }
-                if(final_draw != -1)
-                {
-                    break;
-                }
             }
             
-            return winner.score(final_draw);
+            return winner.score(draws[draw_index - 1]);
         }
 
         public static int part2(string file_name)
         {
             (List<int> draws, List<Board> boards) = readInput(file_name);
 
-            int final_draw = -1;
-            Board loser = new Board();
-            foreach (int draw in draws)
-            {
-                List<Board> winners = new List<Board>();
+            Board loser = null;
 
+            int draw_index = 0;
+            for (; (boards.Count > 0) && (draw_index < draws.Count); ++draw_index)
+            {
                 foreach (Board board in boards)
                 {
-                    if (board.mark(draw))
-                    {
-                        winners.Add(board);
-                    }
+                    board.mark(draws[draw_index]);
                 }
 
-                foreach(Board board in winners)
-                {
-                    boards.Remove(board);
-                }
+                boards = boards.Where(b => !b.won).ToList();
 
-                if (boards.Count < 1)
-                {
-                    final_draw = draw;
-                    break;
-                }
-                else if (boards.Count < 2)
+                if (boards.Count == 1)
                 {
                     loser = boards[0];
                 }
             }
 
-            return loser.score(final_draw);
+            return loser.score(draws[draw_index - 1]);
         }
         static void Main(string[] args)
         {
