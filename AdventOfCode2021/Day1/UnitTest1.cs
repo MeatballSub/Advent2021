@@ -27,7 +27,7 @@ namespace Day1
             return depths.Where((item, index) => (index >= distance) && (item > depths[index - distance])).Count();
         }
 
-        [Theory]
+        //[Theory]
         [MemberData(nameof(Day01Part1sample))]
         [MemberData(nameof(Day01Part1))]
         public void Part1(string file_name, int answer)
@@ -36,7 +36,7 @@ namespace Day1
             Assert.Equal(answer, result);
         }
 
-        [Theory]
+        //[Theory]
         [MemberData(nameof(Day01Part2sample))]
         [MemberData(nameof(Day01Part2))]
         public void Part2(string file_name, int answer)
