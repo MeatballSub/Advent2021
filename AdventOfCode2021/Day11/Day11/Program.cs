@@ -11,22 +11,28 @@ namespace Day11
         static HashSet<Point> flash_set;
         const char FLASH_POINT = (char)('9' + 1);
 
-        static List<char[]> readInput(string file_name)
+        static char[][] readInput(string file_name)
         {
-            return File.ReadAllLines(file_name).Select(l => l.ToCharArray()).ToList();
+            return File.ReadAllLines(file_name).Select(l => l.ToCharArray()).ToArray();
         }
 
-        static List<char[]> increment(List<char[]> octopi)
+        static void increment(char[][] octopi)
         {
-            return octopi.Select(arr => arr.Select(i => (char)(i + 1)).ToArray()).ToList();
+            for (int y = 0; y < octopi.Length; ++y)
+            {
+                for (int x = 0; x < octopi[y].Length; ++x)
+                {
+                    ++octopi[y][x];
+                }
+            }
         }
 
-        static bool boundsCheck(List<char[]> octopi, Point index)
+        static bool boundsCheck(char[][] octopi, Point index)
         {
-            return (index.Y >= 0 && index.Y < octopi.Count && index.X >= 0 && index.X < octopi[index.Y].Length);
+            return (index.Y >= 0 && index.Y < octopi.Length && index.X >= 0 && index.X < octopi[index.Y].Length);
         }
 
-        static List<char[]> flash(List<char[]> octopi, int x, int y)
+        static void flash(char[][] octopi, int x, int y)
         {
             Point octopus = new Point(x, y);
             if(flash_set.Add(octopus))
@@ -44,40 +50,36 @@ namespace Day11
                     }
                 }
             }
-            return octopi;
         }
 
-        static List<char[]> flash(List<char[]> octopi)
+        static void flash(char[][] octopi)
         {
-            for(int y = 0; y < octopi.Count; ++y)
+            for(int y = 0; y < octopi.Length; ++y)
             {
                 for (int x = 0; x < octopi[y].Length; ++x)
                 {
                     if (octopi[y][x] >= FLASH_POINT)
                     {
-                        octopi = flash(octopi, x, y);
+                        flash(octopi, x, y);
                     }
                 }
             }
-            return octopi;
         }
 
-        static List<char[]> reset(List<char[]> octopi)
+        static void reset(char[][] octopi)
         {
             foreach(Point octopus in flash_set)
             {
                 octopi[octopus.Y][octopus.X] = '0';
             }
-            return octopi;
         }
 
-        static List<char[]> step(List<char[]> octopi)
+        static void step(char[][] octopi)
         {
             flash_set.Clear();
-            octopi = increment(octopi);
-            octopi = flash(octopi);
-            octopi = reset(octopi);
-            return octopi;
+            increment(octopi);
+            flash(octopi);
+            reset(octopi);
         }
 
         public static long part1(string file_name)
@@ -88,7 +90,7 @@ namespace Day11
             var octopi = readInput(file_name);            
             for (int i = 0; i < 100; ++i)
             {
-                octopi = step(octopi);
+                step(octopi);
                 count += flash_set.Count;
             }
 
@@ -104,7 +106,7 @@ namespace Day11
             int i = 0;
             for (;  flash_set.Count != num_octopi; ++i)
             {
-                octopi = step(octopi);
+                step(octopi);
             }
 
             return i;
