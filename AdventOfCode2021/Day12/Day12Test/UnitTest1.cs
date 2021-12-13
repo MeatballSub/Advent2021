@@ -5,7 +5,7 @@ namespace Day12Test
 {
     public class UnitTest1
     {
-        [Theory]
+        //[Theory]
         [MemberData(nameof(Part1sample))]
         [MemberData(nameof(Part1sample2))]
         [MemberData(nameof(Part1sample3))]
@@ -16,7 +16,7 @@ namespace Day12Test
             Assert.Equal(answer, result);
         }
 
-        [Theory]
+        //[Theory]
         [MemberData(nameof(Part2sample))]
         [MemberData(nameof(Part2sample2))]
         [MemberData(nameof(Part2sample3))]

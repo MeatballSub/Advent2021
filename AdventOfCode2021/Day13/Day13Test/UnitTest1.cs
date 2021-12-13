@@ -31,9 +31,9 @@ namespace Day13Test
             };
         }
 
-        public static IEnumerable<object[]> Part1sample => TestSetup("sample_input.txt", -1);
+        public static IEnumerable<object[]> Part1sample => TestSetup("sample_input.txt", 17);
 
-        public static IEnumerable<object[]> Part1 => TestSetup("input.txt", -1);
+        public static IEnumerable<object[]> Part1 => TestSetup("input.txt", 827);
 
         public static IEnumerable<object[]> Part2sample => TestSetup("sample_input.txt", -1);
 
