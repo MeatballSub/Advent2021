@@ -5,7 +5,7 @@ namespace Day15Test
 {
     public class UnitTest1
     {
-        [Theory]
+        //[Theory]
         [MemberData(nameof(Part1sample))]
         [MemberData(nameof(Part1))]
         public void Part1Test(string file_name, int answer)
@@ -14,7 +14,7 @@ namespace Day15Test
             Assert.Equal(answer, result);
         }
 
-        [Theory]
+        //[Theory]
         [MemberData(nameof(Part2sample))]
         [MemberData(nameof(Part2))]
         public void Part2Test(string file_name, long answer)
